@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFA to DFA Converter | TOC Academy</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-glow glow-1"></div>
+    <div class="background-glow glow-2"></div>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="ph-fill ph-graph"></i>
+                <h2>TOC<span>Tutor</span></h2>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item">
+                    <i class="ph ph-squares-four"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="turing.html" class="nav-item">
+                    <i class="ph ph-cpu"></i>
+                    <span>Turing Lab</span>
+                </a>
+                <a href="converter.html" class="nav-item active">
+                    <i class="ph ph-intersect"></i>
+                    <span>Converter</span>
+                </a>
+                <a href="library.html" class="nav-item">
+                    <i class="ph ph-books"></i>
+                    <span>Library</span>
+                </a>
+                <a href="exam.html" class="nav-item">
+                    <i class="ph ph-exam"></i>
+                    <span>Exam Center</span>
+                </a>
+            </nav>
+            
+            <div class="user-profile">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User Avatar" class="avatar">
+                <div class="user-info">
+                    <span class="user-name">User</span>
+                    <span class="user-role">Student</span>
+                </div>
+                <button id="btn-logout" class="icon-btn logout-btn"><i class="ph ph-sign-out"></i></button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-header">
+                <div class="welcome-text">
+                    <h1>Automata Converter</h1>
+                    <p>Transform NFA models into equivalent DFA transition tables.</p>
+                </div>
+            </header>
+
+            <div class="glass-card" style="padding: 2.5rem; flex: 1; display: flex; flex-direction: column; gap: 2rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;">
+                    <div class="input-section">
+                        <h3 style="margin-bottom: 1rem; color: var(--neon-blue);">NFA Transitions</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                            Enter each transition on a new line. <br>
+                            Use <code>-></code> for start and <code>*</code> for accept.
+                        </p>
+                        <textarea id="nfa-input" class="glass-input mono-input" rows="12" style="width: 100%; font-size: 1rem; padding: 1.5rem;" placeholder="->q0, 0 -> q0, q1&#10;q0, 1 -> q0&#10;*q1, 0 -> q2"></textarea>
+                        <button id="btn-convert" class="glass-btn highlight-btn" style="width: 100%; margin-top: 1.5rem;">
+                            <i class="ph ph-magic-wand"></i> Perform Subset Construction
+                        </button>
+                    </div>
+
+                    <div class="output-section">
+                        <h3 style="margin-bottom: 1rem; color: var(--neon-blue);">DFA Equivalent</h3>
+                        <div id="dfa-output" class="table-wrapper" style="background: rgba(0,0,0,0.2); border-radius: 16px; padding: 1rem; height: 100%; min-height: 300px;">
+                            <div class="placeholder-text" style="height: 100%; display: flex; align-items: center; justify-content: center; opacity: 0.5;">
+                                DFA table will be generated here...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="shared.js"></script>
+    <script src="js/converter.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | TOC Academy</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-glow glow-1"></div>
+    <div class="background-glow glow-2"></div>
+
+    <div id="login-view" class="login-overlay" style="position: relative; height: 100vh;">
+        <div class="login-card glass-card">
+            <div class="login-header">
+                <i class="ph-fill ph-infinity" style="font-size: 3rem; color: var(--neon-blue);"></i>
+                <h1>TOC Academy</h1>
+                <p>Theory of Computation Masterclass</p>
+            </div>
+            
+            <div class="login-tabs">
+                <button id="tab-student" class="login-tab active">Student</button>
+                <button id="tab-admin" class="login-tab">Administrator</button>
+            </div>
+
+            <div class="login-form">
+                <div class="input-group">
+                    <label><i class="ph ph-user"></i> Username</label>
+                    <input type="text" id="login-username" class="glass-input" placeholder="Enter username">
+                </div>
+                <div class="input-group">
+                    <label><i class="ph ph-lock"></i> Password</label>
+                    <input type="password" id="login-password" class="glass-input" placeholder="••••••••">
+                    <i class="ph ph-eye password-toggle" id="toggle-password" style="position: absolute; right: 1rem; top: 2.5rem; cursor: pointer;"></i>
+                </div>
+                <button id="btn-login-submit" class="glass-btn highlight-btn login-btn">Sign In</button>
+                <p id="login-error" class="error-text" style="display: none;">Invalid credentials. Please try again.</p>
+            </div>
+            <div class="login-footer">
+                <p>Demo Student: <span>any / any</span></p>
+                <p>Demo Admin: <span>admin / admin123</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Modal -->
+    <div id="custom-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content glass-card">
+            <h2 id="modal-title">Notification</h2>
+            <p id="modal-message">Message goes here...</p>
+            <button id="btn-close-modal" class="glass-btn highlight-btn">Dismiss</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginUsernameInput = document.getElementById('login-username');
+            const loginPasswordInput = document.getElementById('login-password');
+            const btnLoginSubmit = document.getElementById('btn-login-submit');
+            const tabStudent = document.getElementById('tab-student');
+            const tabAdmin = document.getElementById('tab-admin');
+            const btnTogglePassword = document.getElementById('toggle-password');
+            const customModal = document.getElementById('custom-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalMessage = document.getElementById('modal-message');
+            const btnCloseModal = document.getElementById('btn-close-modal');
+
+            let currentLoginMode = 'student';
+
+            // Tab Switching
+            tabStudent.addEventListener('click', () => {
+                currentLoginMode = 'student';
+                tabStudent.classList.add('active');
+                tabAdmin.classList.remove('active');
+            });
+
+            tabAdmin.addEventListener('click', () => {
+                currentLoginMode = 'admin';
+                tabAdmin.classList.add('active');
+                tabStudent.classList.remove('active');
+            });
+
+            // Toggle Password
+            btnTogglePassword.addEventListener('click', () => {
+                const type = loginPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                loginPasswordInput.setAttribute('type', type);
+                btnTogglePassword.classList.toggle('ph-eye');
+                btnTogglePassword.classList.toggle('ph-eye-slash');
+            });
+
+            function showModal(title, message, isSuccess = true) {
+                modalTitle.textContent = title;
+                modalTitle.style.color = isSuccess ? '#00f3ff' : '#ff4c4c';
+                modalMessage.textContent = message;
+                customModal.style.display = 'flex';
+            }
+
+            btnCloseModal.addEventListener('click', () => customModal.style.display = 'none');
+
+            btnLoginSubmit.addEventListener('click', () => {
+                const username = loginUsernameInput.value.trim();
+                const password = loginPasswordInput.value.trim();
+
+                if (currentLoginMode === 'admin') {
+                    if (username === 'admin' && password === 'admin123') {
+                        localStorage.setItem('currentUser', JSON.stringify({ name: 'Admin', role: 'Administrator', isAdmin: true }));
+                        window.location.href = 'admin.html';
+                    } else {
+                        showModal("Access Denied", "Invalid admin credentials.", false);
+                    }
+                } else {
+                    if (username && password) {
+                        localStorage.setItem('currentUser', JSON.stringify({ name: username, role: 'Student', isAdmin: false }));
+                        window.location.href = 'index.html';
+                    } else {
+                        showModal("Missing Info", "Please enter username and password.", false);
+                    }
+                }
+            });
+
+            // Enter key support
+            [loginUsernameInput, loginPasswordInput].forEach(input => {
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') btnLoginSubmit.click();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
