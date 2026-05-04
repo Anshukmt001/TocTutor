@@ -45,6 +45,9 @@ function initLab() {
         canvas.height = container.clientHeight;
         draw();
     }
+    
+    window.addEventListener('resize', resize);
+    resize();
 
     canvas.addEventListener('click', (e) => {
         const rect = canvas.getBoundingClientRect();

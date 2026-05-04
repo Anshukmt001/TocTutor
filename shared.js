@@ -46,6 +46,43 @@ document.addEventListener('DOMContentLoaded', () => {
             bar.style.width = width;
         }, 400);
     });
+
+    // 5. Mobile Sidebar Toggle
+    const sidebar = document.querySelector('.sidebar');
+    const menuToggle = document.getElementById('mobile-menu-toggle');
+    const sidebarClose = document.getElementById('mobile-sidebar-close');
+    
+    // Create overlay if not exists
+    let overlay = document.querySelector('.sidebar-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'sidebar-overlay';
+        document.body.appendChild(overlay);
+    }
+
+    const toggleSidebar = (show) => {
+        if (show) {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        } else {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    };
+
+    if (menuToggle) menuToggle.onclick = () => toggleSidebar(true);
+    if (sidebarClose) sidebarClose.onclick = () => toggleSidebar(false);
+    if (overlay) overlay.onclick = () => toggleSidebar(false);
+
+    // Close sidebar on nav click (mobile)
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            if (window.innerWidth <= 768) toggleSidebar(false);
+        });
+    });
 });
 
 // Shared Modal Helper

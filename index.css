@@ -538,6 +538,8 @@ body {
     border: 1px solid var(--card-border);
     border-radius: 12px;
     background: rgba(0, 0, 0, 0.4);
+    touch-action: pan-x pan-y;
+    -webkit-overflow-scrolling: touch;
 }
 
 #dfa-canvas {
@@ -1610,4 +1612,232 @@ body.admin-mode .hidden-admin-btn {
     -webkit-text-fill-color: transparent;
     margin: 2rem 0;
     filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.4));
+}
+
+/* --- Mobile Responsiveness Enhancements --- */
+
+.mobile-menu-btn, .mobile-close-btn {
+    display: none;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    color: var(--text-primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.mobile-menu-btn:hover, .mobile-close-btn:hover {
+    background: rgba(0, 243, 255, 0.1);
+    border-color: var(--neon-blue);
+    color: var(--neon-blue);
+}
+
+@media (max-width: 1024px) {
+    .app-container {
+        padding: 1rem;
+        gap: 1rem;
+    }
+    
+    .sidebar {
+        width: 240px;
+    }
+
+    .admin-main-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .converter-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+
+    .app-container {
+        flex-direction: column;
+        padding: 0;
+        gap: 0;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    /* Sidebar as Overlay */
+    .sidebar {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        bottom: 0;
+        width: 260px;
+        z-index: 2000;
+        border-radius: 0;
+        transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 20px 0 50px rgba(0, 0, 0, 0.8);
+    }
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    .mobile-close-btn {
+        display: flex;
+        margin-left: auto;
+    }
+
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+        z-index: 1999;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+        opacity: 1;
+    }
+
+    /* Main Content Adjustments */
+    .main-content {
+        padding: 1.5rem;
+        width: 100%;
+        overflow-y: visible;
+    }
+
+    .top-header {
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .welcome-text {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .mobile-menu-btn {
+        display: flex;
+    }
+
+    .welcome-text h1 {
+        font-size: 1.8rem;
+        margin-bottom: 0;
+    }
+
+    .welcome-text p {
+        display: none; /* Hide subtitle on small screens to save space */
+    }
+
+    .header-actions {
+        gap: 0.5rem;
+    }
+
+    .icon-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .stat-card {
+        padding: 1rem;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .stat-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+
+    .stat-value {
+        font-size: 1.2rem;
+    }
+
+    /* Activity & Progress */
+    .bottom-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Turing Lab */
+    .canvas-toolbar {
+        justify-content: center;
+    }
+
+    .simulation-controls {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .simulation-controls .glass-input {
+        width: 100%;
+    }
+
+    .simulation-controls .glass-btn {
+        width: 100%;
+    }
+
+    /* Chatbot Responsive */
+    .chatbot-container {
+        width: calc(100% - 40px);
+        left: 20px;
+        right: 20px;
+        height: 70vh;
+        bottom: 90px;
+    }
+
+    /* Admin View */
+    .admin-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Modal */
+    .modal-content {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .welcome-text h1 {
+        font-size: 1.5rem;
+    }
+
+    .top-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .header-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+    
+    .library-grid-view {
+        grid-template-columns: 1fr;
+    }
 }
