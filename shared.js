@@ -100,3 +100,96 @@ function showModal(title, message, isSuccess = true) {
     const closeBtn = document.getElementById('btn-close-modal');
     if (closeBtn) closeBtn.onclick = () => modal.style.display = 'none';
 }
+
+// Global UI Injection (Chatbot & Modals)
+function injectGlobalUI() {
+    // 1. Chatbot
+    if (!document.getElementById('chatbot')) {
+        const chatbotHTML = `
+            <div class="chatbot-container" id="chatbot" style="display: none;">
+                <div class="chatbot-header">
+                    <div class="bot-info" style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                        <i class="ph-fill ph-robot" style="color: var(--neon-blue); font-size: 1.5rem;"></i>
+                        <span>TOC Expert AI</span>
+                    </div>
+                    <button id="btn-close-chat" class="glass-btn" style="padding: 0.25rem 0.5rem; border: none;"><i class="ph ph-x"></i></button>
+                </div>
+                <div class="chatbot-messages" id="chat-messages">
+                    <div class="chat-message bot-message">
+                        <p>Hello! I'm your TOC Expert AI. Ask me anything about automata, grammars, or complexity!</p>
+                    </div>
+                </div>
+                <div class="chatbot-input">
+                    <input type="text" id="chat-input" class="glass-input" placeholder="Type your question..." style="border-radius: 20px;">
+                    <button id="btn-send-chat" class="glass-btn highlight-btn" style="padding: 0.5rem 1rem; border-radius: 20px;"><i class="ph ph-paper-plane-right"></i></button>
+                </div>
+            </div>
+            <button id="btn-toggle-chat" class="floating-chat-btn">
+                <i class="ph-fill ph-chat-circle-dots"></i>
+            </button>
+        `;
+        document.body.insertAdjacentHTML('beforeend', chatbotHTML);
+    }
+
+    // 2. Modals
+    if (!document.getElementById('custom-modal')) {
+        const modalHTML = `
+            <div id="custom-modal" class="modal-overlay" style="display: none;">
+                <div class="modal-content glass-card">
+                    <h2 id="modal-title">Notification</h2>
+                    <p id="modal-message">Message content...</p>
+                    <div class="modal-actions">
+                        <button id="btn-close-modal" class="glass-btn highlight-btn">Dismiss</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
+
+    // 3. Load Dependencies (Marked, KaTeX, Chatbot)
+    const dependencies = [
+        { type: 'script', id: 'marked-js', src: 'https://cdn.jsdelivr.net/npm/marked/marked.min.js' },
+        { type: 'script', id: 'katex-js', src: 'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js' },
+        { type: 'script', id: 'katex-auto-render', src: 'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js' },
+        { type: 'link', id: 'katex-css', href: 'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css' },
+        { type: 'script', id: 'chatbot-js', src: 'js/chatbot.js' }
+    ];
+
+    dependencies.forEach(dep => {
+        const existing = dep.type === 'script' ? 
+                         document.querySelector(`script[src="${dep.src}"]`) : 
+                         document.querySelector(`link[href="${dep.href}"]`);
+        
+        if (!existing) {
+            const el = document.createElement(dep.type === 'script' ? 'script' : 'link');
+            if (dep.type === 'script') {
+                el.src = dep.src;
+                el.async = true;
+                // If it's the chatbot script, re-init after it loads
+                if (dep.id === 'chatbot-js') {
+                    el.onload = () => {
+                        if (window.Chatbot && typeof window.Chatbot.init === 'function') {
+                            window.Chatbot.init();
+                        }
+                    };
+                }
+            } else {
+                el.rel = 'stylesheet';
+                el.href = dep.href;
+            }
+            el.id = dep.id;
+            document.head.appendChild(el);
+        } else if (dep.id === 'chatbot-js' && window.Chatbot) {
+            // Already exists, just init
+            window.Chatbot.init();
+        }
+    });
+}
+
+// Run injection on load (Robust)
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', injectGlobalUI);
+} else {
+    injectGlobalUI();
+}

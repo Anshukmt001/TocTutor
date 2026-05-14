@@ -4,8 +4,61 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const btnConvert = document.getElementById('btn-convert');
+    const btnRandom = document.getElementById('btn-random');
     const nfaInput = document.getElementById('nfa-input');
     const dfaOutput = document.getElementById('dfa-output');
+
+    function generateRandomNFA() {
+        const examples = [
+            `->q0, 0 -> q0, q1
+q0, 1 -> q0
+*q1, 1 -> q2`,
+            `->q0, a -> q0, q1
+q0, b -> q0
+*q1, a -> q2`,
+            `->q0, 0 -> q1
+q0, 1 -> q0, q1
+*q1, 1 -> q2
+q2, 0 -> q2`,
+            `->q0, x -> q0
+q0, y -> q0, q1
+*q1, x -> q2
+q2, y -> q2`,
+            `->q0, a -> q1
+q0, b -> q1
+q1, a -> q2
+*q2, b -> q2`,
+            `->q0, 0 -> q0, q1
+q0, 1 -> q1
+*q1, 0 -> q2`,
+            `->q0, a -> q0
+q0, b -> q0, q1
+*q1, a -> q2
+*q2, b -> q2`,
+            `->q0, 1 -> q0, q1
+q0, 0 -> q1
+*q1, 1 -> q2
+q2, 0 -> q2`,
+            `->q0, a -> q1
+q0, b -> q0
+q1, a -> q2
+*q2, b -> q0, q2`,
+            `->q0, 0 -> q1
+q0, 1 -> q0, q1
+q1, 0 -> q2
+*q2, 1 -> q1`
+        ];
+        return examples[Math.floor(Math.random() * examples.length)];
+    }
+
+    if (btnRandom) {
+        btnRandom.addEventListener('click', () => {
+            nfaInput.value = generateRandomNFA();
+            dfaOutput.innerHTML = `<div class="placeholder-text" style="height: 100%; display: flex; align-items: center; justify-content: center; opacity: 0.5;">
+                                Click "Perform Subset Construction" to convert...
+                            </div>`;
+        });
+    }
 
     if (btnConvert) {
         btnConvert.addEventListener('click', () => {
