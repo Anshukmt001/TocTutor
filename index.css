@@ -1672,6 +1672,7 @@ body.admin-mode .hidden-admin-btn {
     font-weight: 900;
     background: linear-gradient(135deg, #00f3ff, #0088ff);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     margin: 2rem 0;
     filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.4));
