@@ -73,6 +73,19 @@ function initExamCenter() {
         const pct = Math.round((score / currentQuiz.questions.length) * 100);
         document.getElementById('final-score').textContent = `${pct}%`;
         localStorage.setItem('latestScore', pct);
+
+        // Update student registry
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        if (user && !user.isAdmin) {
+            let registry = JSON.parse(localStorage.getItem('studentRegistry') || '{}');
+            if (registry[user.name]) {
+                const s = registry[user.name];
+                s.avgScore = Math.round((s.avgScore * s.attempts + pct) / (s.attempts + 1));
+                s.attempts++;
+                s.lastActive = new Date().toISOString();
+                localStorage.setItem('studentRegistry', JSON.stringify(registry));
+            }
+        }
     }
 
     const retBtn = document.getElementById('btn-return-dashboard');

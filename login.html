@@ -112,7 +112,25 @@
                     }
                 } else {
                     if (username && password) {
-                        localStorage.setItem('currentUser', JSON.stringify({ name: username, role: 'Student', isAdmin: false }));
+                        const studentData = { 
+                            name: username, 
+                            role: 'Student', 
+                            isAdmin: false,
+                            lastActive: new Date().toISOString(),
+                            avgScore: 0,
+                            attempts: 0
+                        };
+                        
+                        // Register/Update student in registry
+                        let registry = JSON.parse(localStorage.getItem('studentRegistry') || '{}');
+                        if (!registry[username]) {
+                            registry[username] = studentData;
+                        } else {
+                            registry[username].lastActive = new Date().toISOString();
+                        }
+                        localStorage.setItem('studentRegistry', JSON.stringify(registry));
+                        
+                        localStorage.setItem('currentUser', JSON.stringify(registry[username]));
                         window.location.href = 'index.html';
                     } else {
                         showModal("Missing Info", "Please enter username and password.", false);
